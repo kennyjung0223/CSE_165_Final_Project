@@ -3,15 +3,16 @@
 #include "TexRect.h"
 
 class Pepe: public TexRect {
-    float dx;
-    float dy;
     float speed;
 
 public:
     Pepe();
 
-    void key_up(unsigned char);
-    void key_down(unsigned char);
+    void moveUp();
+    void moveLeft();
+    void moveRight();
+    void moveDown();
+
     float get_speed() const;
 
     void increment_speed();

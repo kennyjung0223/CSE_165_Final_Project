@@ -1,39 +1,7 @@
 #include "Pepe.h"
 
 Pepe::Pepe(): TexRect("assets/pepe.png", 0, 0, 0.4, 0.4) {
-    dx = 0;
-    dy = 0;
     speed = 0.01;
-}
-
-void Pepe::key_up(unsigned char key) {
-    if (key == 'w') {
-        dy -= speed;
-    }
-    else if (key == 'a') {
-        dx += speed;
-    }
-    else if (key == 's') {
-        dy += speed;
-    }
-    else if (key == 'd') {
-        dx -= speed;
-    }
-}
-
-void Pepe::key_down(unsigned char key) {
-    if (key == 'w') {
-        dy += speed;
-    }
-    else if (key == 'a') {
-        dx -= speed;
-    }
-    else if (key == 's') {
-        dy -= speed;
-    }
-    else if (key == 'd') {
-        dx += speed;
-    }
 }
 
 float Pepe::get_speed() const {
@@ -41,13 +9,26 @@ float Pepe::get_speed() const {
 }
 
 void Pepe::increment_speed() {
-    speed += 0.01;
+    speed += 0.0025;
+}
+
+void Pepe::moveUp() {
+	y += speed;
+}
+
+void Pepe::moveLeft() {
+	x -= speed;
+}
+
+void Pepe::moveRight() {
+	x += speed;
+}
+
+void Pepe::moveDown() {
+	y -= speed;
 }
 
 void Pepe::idle() {
-    x += dx;
-    y += dy;
-
     if (x < -1) {
         x = -1;
     }

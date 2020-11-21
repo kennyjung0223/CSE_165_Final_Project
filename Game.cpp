@@ -1,25 +1,86 @@
+#include <iostream>
 #include "Game.h"
 
 Game::Game() {
     bg = new TexRect("assets/winter_bg.png", -1, 1, 2, 2);
-    fries = new TexRect("assets/fries.png", -0.2, 0.3, 0.1, 0.1);
+    objects.push_back(new TexRect("assets/fries.png", -0.2, 0.3, 0.1, 0.1));
+    objects.push_back(new TexRect("assets/fries.png", 0.5, 0.5, 0.1, 0.1));
     snowball = new TexRect("assets/snowball.png", -0.5, 0.2, 0.15, 0.15);
     pepe = new Pepe();
 }
 
 void Game::draw() {
     bg->draw();
-    fries->draw();
     snowball->draw();
     pepe->draw();
+
+    update();
+
+    if (!objects.empty()) {
+        std::vector<Rect*>::iterator it = objects.begin();
+
+        while (it != objects.end()) {
+            (*it)->draw();
+            
+            if (collided(*pepe, *(*it))) {
+                pepe->increment_speed();
+                objects.erase(it);
+                std::cout << pepe->get_speed() << std::endl;
+            }
+            else {
+                it++;
+            }
+        }
+    }
 }
 
 void Game::key_up(unsigned char key) {
-    pepe->key_up(key);
+    if (key == 'w') {
+        movingUp = false;
+    }
+    else if (key == 'a') {
+        movingLeft = false;
+    }
+    else if (key == 'd') {
+        movingRight = false;
+    }
+    else if (key == 's') {
+        movingDown = false;
+    }
 }
 
 void Game::key_down(unsigned char key) {
-    pepe->key_down(key);
+    if (key == 'w') {
+        movingUp = true;
+    }
+    else if (key == 'a') {
+        movingLeft = true;
+    }
+    else if (key == 'd') {
+        movingRight = true;
+    }
+    else if (key == 's') {
+        movingDown = true;
+    }
+}
+
+void Game::update() {
+    if (movingUp) {
+        pepe->moveUp();
+    }
+    if (movingLeft) {
+        pepe->moveLeft();
+    }
+    if (movingRight) {
+        pepe->moveRight();
+    }
+    if (movingDown) {
+       pepe->moveDown();
+    }
+}
+
+bool Game::collided(const Rect& one, const Rect& two) const {
+    return one.getX() + one.getW() >= two.getW() && one.getX() <= two.getX() + two.getW() && one.getY() >= two.getY() - two.getH() && one.getY() - one.getH() <= two.getY();
 }
 
 void Game::idle() {
@@ -28,7 +89,10 @@ void Game::idle() {
 
 Game::~Game() {
     delete bg;
-    delete fries;
     delete snowball;
     delete pepe;
+
+    for (std::vector<Rect*>::iterator it = objects.begin(); it != objects.end(); it++) {
+        delete (*it);
+    }
 }

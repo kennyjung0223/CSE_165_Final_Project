@@ -11,11 +11,7 @@
 
 class App: public GlutApp {
 
-std::vector<Shape*> shapes;
-Sprite* explosion;
 Game* game;
-
-bool explosion_visible;
 
 public:
     
