@@ -19,8 +19,12 @@ class Game {
     bool movingRight = false;
     bool movingDown = false;
 
-public:
+    bool gameover;
     bool explosion_visible;
+
+    int score;
+
+public:
 
     Game();
 
@@ -33,11 +37,19 @@ public:
 
     void update();
 
+    void generate_snowballs();
+
     void idle();
 
     Sprite* get_explosion() const;
 
     bool collided(const TexRect&, const TexRect&) const;
+    bool is_gameover() const;
+    
+    bool is_explosion_visible() const;
+    void set_explosion_off();
+
+    void renderText(std::string, float, float, void*, float, float, float);
 
     ~Game();
 };

@@ -1,26 +1,44 @@
 #include <iostream>
 #include "Game.h"
 
+#if defined WIN32
+#include <freeglut.h>
+#elif defined __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/freeglut.h>
+#endif
+
 Game::Game() {
     bg = new TexRect("assets/winter_bg.png", -1, 1, 2, 2);
     explosion = new Sprite("assets/explosion.png", 5, 5, -0.8, 0.8, 0.5, 0.5);
-    fries.push_back(new Projectiles("assets/fries.png", -0.3, 1, 0.1, 0.1));
-    fries.push_back(new Projectiles("assets/fries.png", 0.1, 1, 0.1, 0.1));
-    fries.push_back(new Projectiles("assets/fries.png", 0.4, 1, 0.1, 0.1));
-    snowballs.push_back(new Projectiles("assets/snowball.png", -0.6, 1, 0.15, 0.15));
-    snowballs.push_back(new Projectiles("assets/snowball.png", -0.1, 1, 0.15, 0.15));
+    fries.push_back(new Projectiles("assets/fries.png", -0.3, 1.2, 0.1, 0.1));
+    fries.push_back(new Projectiles("assets/fries.png", 0.1, 1.2, 0.1, 0.1));
+    fries.push_back(new Projectiles("assets/fries.png", 0.4, 1.2, 0.1, 0.1));
+    snowballs.push_back(new Projectiles("assets/snowball.png", -0.6, 1.2, 0.15, 0.15));
+    snowballs.push_back(new Projectiles("assets/snowball.png", -0.1, 1.2, 0.15, 0.15));
     snowballs.push_back(new Projectiles("assets/snowball.png", 0.3, 1, 0.15, 0.15));
     pepe = new Pepe();
+
+    gameover = false;
+    score = 0;
 }
 
 void Game::draw() {
     bg->draw();
-    pepe->draw();
+    if (!gameover) {
+        pepe->draw();
 
-    update();
+        update();
 
-    draw_snowballs();
-    draw_fries();
+        draw_snowballs();
+        draw_fries();
+
+        renderText("Score: " + std::to_string(score), -0.95, -0.95, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+    }
+    else {
+        renderText("Final Score: " + std::to_string(score), -0.220, -0.5, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+    }
 }
 
 void Game::draw_snowballs() {
@@ -32,9 +50,14 @@ void Game::draw_snowballs() {
             (*it)->move();
 
             if (collided(*pepe, *(*it))) {
+                gameover = true;
                 explosion_visible = true;
                 explosion->setX(pepe->getX());
                 explosion->setY(pepe->getY());
+                snowballs.erase(it);
+            }
+            else if ((*it)->getY() < -1) {
+                score++;
                 snowballs.erase(it);
             }
             else {
@@ -108,12 +131,30 @@ void Game::update() {
     }
 }
 
+void Game::generate_snowballs() {
+    snowballs.push_back(new Projectiles("assets/snowball.png", -0.6, 1, 0.15, 0.15));
+    snowballs.push_back(new Projectiles("assets/snowball.png", -0.1, 1, 0.15, 0.15));
+    snowballs.push_back(new Projectiles("assets/snowball.png", 0.3, 1, 0.15, 0.15));
+}
+
 Sprite* Game::get_explosion() const {
     return explosion;
 }
 
 bool Game::collided(const TexRect& one, const TexRect& two) const {
     return one.getX() < two.getX() + two.getW() && one.getX() + one.getW() > two.getX() && one.getY() > two.getY() - two.getH() && one.getY() - one.getH() < two.getY();
+}
+
+bool Game::is_gameover() const {
+    return gameover;
+}
+
+bool Game::is_explosion_visible() const {
+    return explosion_visible == true;
+}
+
+void Game::set_explosion_off() {
+    explosion_visible = false;
 }
 
 void Game::idle() {
@@ -130,5 +171,24 @@ Game::~Game() {
 
     for (std::vector<TexRect*>::iterator it = fries.begin(); it != fries.end(); it++) {
         delete (*it);
+    }
+}
+
+void Game::renderText(
+    std::string text, 
+    float x, 
+    float y, 
+    void* font = GLUT_BITMAP_HELVETICA_18, 
+    float r = 1, 
+    float g = 1, 
+    float b = 1
+){
+    glColor3f(r, g, b);
+    float offset = 0;
+    for (int i = 0; i < text.length(); i++) {
+        glRasterPos3f(x+offset, y, 1);
+        glutBitmapCharacter(font, text[i]);
+        int w = glutBitmapWidth(font, text[i]);
+        offset += ((float)w / 640)*2;
     }
 }
