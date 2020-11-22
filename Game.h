@@ -2,14 +2,14 @@
 
 #include <vector>
 #include "Pepe.h"
+#include "Fries.h"
 #include "Sprite.h"
 
 class Game {
     TexRect* bg;
-    TexRect* fries;
     TexRect* snowball;
 
-    std::vector<Rect*> objects;
+    std::vector<TexRect*> objects;
 
     Pepe* pepe;
 
@@ -30,7 +30,7 @@ public:
 
     void idle();
 
-    bool collided(const Rect&, const Rect&) const;
+    bool collided(const TexRect&, const TexRect&) const;
 
     ~Game();
 };

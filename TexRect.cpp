@@ -92,3 +92,7 @@ void TexRect::draw(float z) const {
     
     glDisable(GL_TEXTURE_2D);
 }
+
+void TexRect::move() {
+    std::cout << "move" << std::endl;
+}
