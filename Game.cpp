@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include "Game.h"
 
 #if defined WIN32
@@ -12,16 +13,14 @@
 Game::Game() {
     bg = new TexRect("assets/winter_bg.png", -1, 1, 2, 2);
     explosion = new Sprite("assets/explosion.png", 5, 5, -0.8, 0.8, 0.5, 0.5);
-    fries.push_back(new Projectiles("assets/fries.png", -0.3, 1.2, 0.1, 0.1));
-    fries.push_back(new Projectiles("assets/fries.png", 0.1, 1.2, 0.1, 0.1));
-    fries.push_back(new Projectiles("assets/fries.png", 0.4, 1.2, 0.1, 0.1));
-    snowballs.push_back(new Projectiles("assets/snowball.png", -0.6, 1.2, 0.15, 0.15));
-    snowballs.push_back(new Projectiles("assets/snowball.png", -0.1, 1.2, 0.15, 0.15));
-    snowballs.push_back(new Projectiles("assets/snowball.png", 0.3, 1, 0.15, 0.15));
+    // fries.push_back(new Projectiles("assets/fries.png", -0.3, 1.2, 0.1, 0.1));
+    // fries.push_back(new Projectiles("assets/fries.png", 0.1, 1.2, 0.1, 0.1));
+    // fries.push_back(new Projectiles("assets/fries.png", 0.4, 1.2, 0.1, 0.1));
     pepe = new Pepe();
 
     gameover = false;
     score = 0;
+    temp = 0;
 }
 
 void Game::draw() {
@@ -34,11 +33,20 @@ void Game::draw() {
         draw_snowballs();
         draw_fries();
 
+        if (temp % 200 == 0) {
+            generate_snowballs();
+
+            if (temp == 1000) {
+                temp = 0;
+            }
+        }
+
         renderText("Score: " + std::to_string(score), -0.95, -0.95, GLUT_BITMAP_HELVETICA_18, 0,0,0);
     }
     else {
         renderText("Final Score: " + std::to_string(score), -0.220, -0.5, GLUT_BITMAP_HELVETICA_18, 0,0,0);
     }
+    temp++;
 }
 
 void Game::draw_snowballs() {
@@ -132,9 +140,13 @@ void Game::update() {
 }
 
 void Game::generate_snowballs() {
-    snowballs.push_back(new Projectiles("assets/snowball.png", -0.6, 1, 0.15, 0.15));
-    snowballs.push_back(new Projectiles("assets/snowball.png", -0.1, 1, 0.15, 0.15));
-    snowballs.push_back(new Projectiles("assets/snowball.png", 0.3, 1, 0.15, 0.15));
+    float arr[] = {-0.6, -0.1, 0.3};
+
+    srand(time(0));
+
+    for (int i = 0; i < 3; i++) {
+        snowballs.push_back(new Projectiles("assets/snowball.png", arr[i], 1, 0.15, 0.15, rand()));
+    }
 }
 
 Sprite* Game::get_explosion() const {

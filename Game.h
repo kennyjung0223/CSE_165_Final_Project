@@ -23,6 +23,7 @@ class Game {
     bool explosion_visible;
 
     int score;
+    int temp;
 
 public:
 

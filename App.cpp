@@ -5,6 +5,7 @@ static App* singleton;
 
 void explosion_timer(int id) {
     singleton->game->get_explosion()->advance();
+    singleton->redraw();
 
     if (singleton->game->get_explosion()->isDone()) {
         singleton->game->set_explosion_off();
@@ -29,7 +30,6 @@ void App::draw() const {
         singleton->game->get_explosion()->draw();
         explosion_timer(1);
     }
-    // snowballs_timer(2);
 }
 
 void App::keyUp(unsigned char key, float x, float y){

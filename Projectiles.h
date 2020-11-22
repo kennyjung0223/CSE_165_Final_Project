@@ -7,7 +7,7 @@ class Projectiles: public TexRect {
     float y_speed;
 
 public:
-    Projectiles(const char*, float, float, float, float);
+    Projectiles(const char*, float, float, float, float, int);
 
     void move();
 };
