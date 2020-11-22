@@ -10,7 +10,7 @@
 #include "Sprite.h"
 
 class App: public GlutApp {
-
+    
 Game* game;
 
 public:
@@ -23,6 +23,8 @@ public:
     void keyUp(unsigned char key, float x, float y);
 
     void idle();
+
+    friend void explosion_timer(int);
 
     ~App();
 };

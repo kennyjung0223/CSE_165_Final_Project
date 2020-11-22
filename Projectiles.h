@@ -2,12 +2,12 @@
 
 #include "TexRect.h"
 
-class Fries: public TexRect {
+class Projectiles: public TexRect {
     float x_speed;
     float y_speed;
 
 public:
-    Fries();
+    Projectiles(const char*, float, float, float, float);
 
     void move();
 };

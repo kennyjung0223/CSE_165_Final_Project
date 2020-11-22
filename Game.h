@@ -2,14 +2,15 @@
 
 #include <vector>
 #include "Pepe.h"
-#include "Fries.h"
+#include "Projectiles.h"
 #include "Sprite.h"
 
 class Game {
     TexRect* bg;
-    TexRect* snowball;
+    Sprite* explosion;
 
-    std::vector<TexRect*> objects;
+    std::vector<TexRect*> fries;
+    std::vector<TexRect*> snowballs;
 
     Pepe* pepe;
 
@@ -19,9 +20,13 @@ class Game {
     bool movingDown = false;
 
 public:
+    bool explosion_visible;
+
     Game();
 
     void draw();
+    void draw_snowballs();
+    void draw_fries();
 
     void key_up(unsigned char);
     void key_down(unsigned char);
@@ -29,6 +34,8 @@ public:
     void update();
 
     void idle();
+
+    Sprite* get_explosion() const;
 
     bool collided(const TexRect&, const TexRect&) const;
 
