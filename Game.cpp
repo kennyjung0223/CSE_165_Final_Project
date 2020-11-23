@@ -54,6 +54,8 @@ void Game::draw() {
         renderText("Score: " + std::to_string(score), -0.95, -0.95, GLUT_BITMAP_HELVETICA_18, 0,0,0);
     }
     else {
+        explode();
+
         renderText("Final Score: " + std::to_string(score), -0.17, -0.5, GLUT_BITMAP_HELVETICA_18, 0,0,0);
         renderText("High Score: " + std::to_string(get_high_score(score)), -0.17, -0.6, GLUT_BITMAP_HELVETICA_18, 0,0,0);
         renderText("Press r to restart", -0.2, -0.7, GLUT_BITMAP_HELVETICA_18, 0,0,0);
@@ -97,6 +99,7 @@ void Game::draw_apples() {
             (*it)->move();
 
             if (collided(*pepe, *(*it))) {
+                score += 3;
                 pepe->increment_speed();
                 apples.erase(it);
             }
@@ -159,10 +162,11 @@ void Game::update() {
 }
 
 void Game::generate_apples() {
+    float arr[] = {-0.4, 0.2, 0.5};
     srand(time(0));
 
     for (int i = 0; i < A_QUANTITY; i++) {
-        apples.push_back(new Projectiles("assets/apple.png", 0, 1, 0.125, 0.125, rand()));
+        apples.push_back(new Projectiles("assets/apple.png", arr[i], 1, 0.125, 0.125, rand()));
     }
 }
 
@@ -172,7 +176,6 @@ void Game::generate_snowballs() {
     srand(time(0));
 
     if (score != 0 && score % 100 == 0) {
-        std::cout << score << std::endl;
         sb_quantity++;
     }
 
@@ -181,8 +184,14 @@ void Game::generate_snowballs() {
     }
 }
 
-Sprite* Game::get_explosion() const {
-    return explosion;
+void Game::explode() {
+    if (explosion_visible) {
+        explosion->draw();
+    }
+    if (explosion->isDone()) {
+        explosion_visible = false;
+    }
+    explosion->advance();
 }
 
 bool Game::collided(const TexRect& one, const TexRect& two) const {
@@ -191,14 +200,6 @@ bool Game::collided(const TexRect& one, const TexRect& two) const {
 
 bool Game::is_gameover() const {
     return gameover;
-}
-
-bool Game::is_explosion_visible() const {
-    return explosion_visible == true;
-}
-
-void Game::set_explosion_off() {
-    explosion_visible = false;
 }
 
 void Game::idle() {

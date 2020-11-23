@@ -20,7 +20,6 @@ class Game {
     bool movingDown = false;
 
     bool gameover;
-    bool explosion_visible;
 
     int score;
     int temp;
@@ -32,6 +31,8 @@ class Game {
     int get_high_score(int);
 
 public:
+
+    bool explosion_visible;
 
     Game();
 
@@ -51,13 +52,10 @@ public:
 
     void reset();
 
-    Sprite* get_explosion() const;
+    void explode();
 
     bool collided(const TexRect&, const TexRect&) const;
     bool is_gameover() const;
-    
-    bool is_explosion_visible() const;
-    void set_explosion_off();
 
     void renderText(std::string, float, float, void*, float, float, float);
 
