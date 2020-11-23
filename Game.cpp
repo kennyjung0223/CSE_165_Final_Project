@@ -18,7 +18,7 @@ Game::Game() {
 
     starting_points.push_back(-0.6);
     starting_points.push_back(0.1);
-    starting_points.push_back(0.3);
+    starting_points.push_back(0.6);
 
     home = true;
     gameover = false;
@@ -59,10 +59,10 @@ void Game::draw() {
             generate_apples();
         }
 
-        if (temp % 50 == 0) {
+        if (temp % 75 == 0) {
             generate_snowballs();
 
-            if (temp == 1000) {
+            if (temp == 1050) {
                 temp = 0;
             }
         }
@@ -99,6 +99,10 @@ void Game::draw_snowballs() {
             else if ((*it)->getY() < -1) {
                 score++;
                 snowballs.erase(it);
+
+                if (score % 10 == 0) {
+                    add_snowball();
+                }
             }
             else {
                 it++;
@@ -181,8 +185,16 @@ void Game::update() {
     }
 }
 
+void Game::generate_snowballs() {
+    srand(time(0));
+
+    for (int i = 0; i < sb_quantity; i++) {
+        snowballs.push_back(new Projectiles("assets/snowball.png", starting_points[i], 1, 0.1, 0.1, rand()));
+    }
+}
+
 void Game::generate_apples() {
-    float arr[] = {-0.4, 0.2, 0.5};
+    float arr[] = {-0.4, 0, 0.4};
     srand(time(0));
 
     for (int i = 0; i < A_QUANTITY; i++) {
@@ -190,19 +202,12 @@ void Game::generate_apples() {
     }
 }
 
-void Game::generate_snowballs() {
+void Game::add_snowball() {
     srand(time(0));
 
-    if (score != 0 && score % 100 == 0) {
-        index = ((rand() % 10) / 5.625) - 0.8;
-        std::cout << index << std::endl;
-        starting_points.push_back(index);
-        sb_quantity++;
-    }
-
-    for (int i = 0; i < sb_quantity; i++) {
-        snowballs.push_back(new Projectiles("assets/snowball.png", starting_points[i], 1, 0.1, 0.1, rand()));
-    }
+    index = ((rand() % 10) / 5.625) - 0.8;
+    starting_points.push_back(index);
+    sb_quantity++;    
 }
 
 void Game::explode() {
@@ -229,14 +234,22 @@ void Game::idle() {
     pepe->idle();
 }
 
+void Game::reset_sp() {
+    for (int i = 3; i < sb_quantity; i++) {
+        starting_points.pop_back();
+    }
+
+    sb_quantity = 3;
+}
+
 void Game::reset() {
     gameover = false;
-    pepe->setX(0);
-    pepe->setY(0);
+    pepe->setX(-0.1);
+    pepe->setY(-0.1);
     pepe->reset_speed();
+    reset_sp();
     snowballs.clear();
     apples.clear();
-    starting_points.erase(starting_points.begin() + 3, starting_points.end());
     score = 0;
     temp = 0;
     explosion_visible = false;

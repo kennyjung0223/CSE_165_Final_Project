@@ -6,7 +6,7 @@ Projectiles::Projectiles(const char* filename, float x, float y, float w, float 
     y_speed = ((rand % 10) / 4500.0) - 0.004;
 
     if (filename == "assets/snowball.png") {
-        y_speed -= 0.002;
+        y_speed -= 0.0005;
     }
 }
 

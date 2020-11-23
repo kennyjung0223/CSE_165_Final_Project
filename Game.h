@@ -9,8 +9,8 @@ class Game {
     TexRect* bg;
     Sprite* explosion;
 
-    std::vector<TexRect*> apples;
     std::vector<TexRect*> snowballs;
+    std::vector<TexRect*> apples;
     std::vector<float> starting_points;
 
     Pepe* pepe;
@@ -51,9 +51,11 @@ public:
 
     void generate_apples();
     void generate_snowballs();
+    void add_snowball();
 
     void idle();
 
+    void reset_sp();
     void reset();
 
     void explode();

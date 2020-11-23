@@ -1,7 +1,7 @@
 #include "Pepe.h"
 
 Pepe::Pepe(): TexRect("assets/pepe.png", -0.1, -0.1, 0.2, 0.2) {
-    speed = 0.01;
+    speed = 0.0075;
 }
 
 float Pepe::get_speed() const {
@@ -9,7 +9,7 @@ float Pepe::get_speed() const {
 }
 
 void Pepe::reset_speed() {
-    speed = 0.01;
+    speed = 0.0075;
 }
 
 void Pepe::increment_speed() {
