@@ -101,6 +101,7 @@ void Game::draw_snowballs() {
                 score++;
                 snowballs.erase(it);
 
+                // 100, 300, 600, 1000, 1500, 2100...
                 if (score % (i * 100) == 0) {
                     i = ((i + 1) * (i + 2)) / 2;
                     add_snowball();
