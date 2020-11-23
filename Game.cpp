@@ -18,6 +18,7 @@ Game::Game() {
     gameover = false;
     score = 0;
     temp = 0;
+    sb_quantity = 3;
 }
 
 void Game::draw() {
@@ -149,7 +150,7 @@ void Game::update() {
 void Game::generate_apples() {
     srand(time(0));
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < A_QUANTITY; i++) {
         apples.push_back(new Projectiles("assets/apple.png", 0, 1, 0.125, 0.125, rand()));
     }
 }
@@ -159,7 +160,12 @@ void Game::generate_snowballs() {
 
     srand(time(0));
 
-    for (int i = 0; i < 3; i++) {
+    if (score != 0 && score % 100 == 0) {
+        std::cout << score << std::endl;
+        sb_quantity++;
+    }
+
+    for (int i = 0; i < sb_quantity; i++) {
         snowballs.push_back(new Projectiles("assets/snowball_c.png", arr[i], 1, 0.1, 0.1, rand()));
     }
 }
@@ -197,6 +203,8 @@ void Game::reset() {
     apples.clear();
     score = 0;
     temp = 0;
+    explosion_visible = false;
+    explosion->reset();
 }
 
 Game::~Game() {

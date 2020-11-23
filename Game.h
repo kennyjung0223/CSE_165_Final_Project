@@ -24,6 +24,8 @@ class Game {
 
     int score;
     int temp;
+    const int A_QUANTITY = 3;
+    int sb_quantity;
 
 public:
 
