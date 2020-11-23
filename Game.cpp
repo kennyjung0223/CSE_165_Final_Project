@@ -19,6 +19,14 @@ Game::Game() {
     score = 0;
     temp = 0;
     sb_quantity = 3;
+    high_score = 0;
+}
+
+int Game::get_high_score(int score) {
+    if (score > high_score) {
+        high_score = score;
+    }
+    return high_score;
 }
 
 void Game::draw() {
@@ -46,7 +54,10 @@ void Game::draw() {
         renderText("Score: " + std::to_string(score), -0.95, -0.95, GLUT_BITMAP_HELVETICA_18, 0,0,0);
     }
     else {
-        renderText("Final Score: " + std::to_string(score), -0.220, -0.5, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        renderText("Final Score: " + std::to_string(score), -0.17, -0.5, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        renderText("High Score: " + std::to_string(get_high_score(score)), -0.17, -0.6, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        renderText("Press r to restart", -0.2, -0.7, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        renderText("Press esc to quit", -0.2, -0.8, GLUT_BITMAP_HELVETICA_18, 0,0,0);
     }
     temp++;
 }

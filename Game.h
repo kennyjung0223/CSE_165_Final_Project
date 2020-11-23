@@ -27,6 +27,10 @@ class Game {
     const int A_QUANTITY = 3;
     int sb_quantity;
 
+    int high_score;
+
+    int get_high_score(int);
+
 public:
 
     Game();
