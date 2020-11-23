@@ -188,10 +188,12 @@ void Game::explode() {
     if (explosion_visible) {
         explosion->draw();
     }
+
+    explosion->advance();
+
     if (explosion->isDone()) {
         explosion_visible = false;
     }
-    explosion->advance();
 }
 
 bool Game::collided(const TexRect& one, const TexRect& two) const {
