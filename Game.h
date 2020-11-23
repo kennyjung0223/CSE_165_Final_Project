@@ -31,12 +31,13 @@ class Game {
 
     int high_score;
     float index;
+    int i;
+
+    bool explosion_visible;
 
     int get_high_score(int);
 
 public:
-
-    bool explosion_visible;
 
     Game();
 

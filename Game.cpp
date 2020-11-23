@@ -27,6 +27,7 @@ Game::Game() {
     temp = 0;
     sb_quantity = 3;
     high_score = 0;
+    i = 1;
 }
 
 int Game::get_high_score(int score) {
@@ -96,11 +97,12 @@ void Game::draw_snowballs() {
                 explosion->setY(pepe->getY());
                 snowballs.erase(it);
             }
-            else if ((*it)->getY() < -1) {
+            else if ((*it)->getY() < -1 || (*it)->getX() + (*it)->getW() > 1 || (*it)->getX() < -1) {
                 score++;
                 snowballs.erase(it);
 
-                if (score % 10 == 0) {
+                if (score % (i * 100) == 0) {
+                    i = ((i + 1) * (i + 2)) / 2;
                     add_snowball();
                 }
             }
@@ -124,7 +126,7 @@ void Game::draw_apples() {
                 pepe->increment_speed();
                 apples.erase(it);
             }
-            else if ((*it)->getY() < -1) {
+            else if ((*it)->getY() < -1 || (*it)->getX() + (*it)->getW() > 1 || (*it)->getX() < -1) {
                 apples.erase(it);
             }
             else {
