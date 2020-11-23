@@ -1,6 +1,6 @@
 #include "Pepe.h"
 
-Pepe::Pepe(): TexRect("assets/pepe_c.png", 0, 0, 0.2, 0.2) {
+Pepe::Pepe(): TexRect("assets/pepe.png", -0.1, -0.1, 0.2, 0.2) {
     speed = 0.01;
 }
 

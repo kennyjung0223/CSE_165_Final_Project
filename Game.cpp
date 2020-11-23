@@ -14,8 +14,15 @@ Game::Game() {
     bg = new TexRect("assets/winter_bg.png", -1, 1, 2, 2);
     explosion = new Sprite("assets/explosion.png", 5, 5, -0.8, 0.8, 0.5, 0.5);
     pepe = new Pepe();
+    fainted_pepe = new TexRect("assets/pepe_f.png", -0.2, 0, 0.4, 0.4);
 
+    starting_points.push_back(-0.6);
+    starting_points.push_back(0.1);
+    starting_points.push_back(0.3);
+
+    home = true;
     gameover = false;
+
     score = 0;
     temp = 0;
     sb_quantity = 3;
@@ -31,7 +38,16 @@ int Game::get_high_score(int score) {
 
 void Game::draw() {
     bg->draw();
-    if (!gameover) {
+    if (home) {
+        pepe->draw();
+
+        renderText("Welcome to 'Save Pepe'", -0.3, -0.5, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        renderText("Move Pepe using WASD keys and dodge snowballs", -0.7, -0.6, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        renderText("Occassionally, rainbow apples will fall which boosts Pepe's speed", -0.8, -0.7, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        renderText("Snowball fallen to ground = 1 point, rainbow apple = 3 points", -0.75, -0.8, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        renderText("Press p to play", -0.2, -0.9, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+    }
+    else if (!gameover) {
         pepe->draw();
 
         update();
@@ -52,16 +68,17 @@ void Game::draw() {
         }
 
         renderText("Score: " + std::to_string(score), -0.95, -0.95, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        temp++;
     }
     else {
         explode();
 
+        fainted_pepe->draw();
         renderText("Final Score: " + std::to_string(score), -0.17, -0.5, GLUT_BITMAP_HELVETICA_18, 0,0,0);
         renderText("High Score: " + std::to_string(get_high_score(score)), -0.17, -0.6, GLUT_BITMAP_HELVETICA_18, 0,0,0);
         renderText("Press r to restart", -0.2, -0.7, GLUT_BITMAP_HELVETICA_18, 0,0,0);
         renderText("Press esc to quit", -0.2, -0.8, GLUT_BITMAP_HELVETICA_18, 0,0,0);
     }
-    temp++;
 }
 
 void Game::draw_snowballs() {
@@ -144,6 +161,9 @@ void Game::key_down(unsigned char key) {
     else if (gameover && key == 'r') {
         reset();
     }
+    else if (home && key == 'p') {
+        home = false;
+    }
 }
 
 void Game::update() {
@@ -171,16 +191,17 @@ void Game::generate_apples() {
 }
 
 void Game::generate_snowballs() {
-    float arr[] = {-0.6, -0.1, 0.3};
-
     srand(time(0));
 
     if (score != 0 && score % 100 == 0) {
+        index = ((rand() % 10) / 5.625) - 0.8;
+        std::cout << index << std::endl;
+        starting_points.push_back(index);
         sb_quantity++;
     }
 
     for (int i = 0; i < sb_quantity; i++) {
-        snowballs.push_back(new Projectiles("assets/snowball_c.png", arr[i], 1, 0.1, 0.1, rand()));
+        snowballs.push_back(new Projectiles("assets/snowball.png", starting_points[i], 1, 0.1, 0.1, rand()));
     }
 }
 
@@ -215,6 +236,7 @@ void Game::reset() {
     pepe->reset_speed();
     snowballs.clear();
     apples.clear();
+    starting_points.erase(starting_points.begin() + 3, starting_points.end());
     score = 0;
     temp = 0;
     explosion_visible = false;

@@ -11,14 +11,17 @@ class Game {
 
     std::vector<TexRect*> apples;
     std::vector<TexRect*> snowballs;
+    std::vector<float> starting_points;
 
     Pepe* pepe;
+    TexRect* fainted_pepe;
 
     bool movingUp = false;
     bool movingLeft = false;
     bool movingRight = false;
     bool movingDown = false;
 
+    bool home;
     bool gameover;
 
     int score;
@@ -27,6 +30,7 @@ class Game {
     int sb_quantity;
 
     int high_score;
+    float index;
 
     int get_high_score(int);
 
