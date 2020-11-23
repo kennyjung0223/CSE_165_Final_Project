@@ -9,5 +9,6 @@ class Projectiles: public TexRect {
 public:
     Projectiles(const char*, float, float, float, float, int);
 
+    // virtual function of TexRect
     void move();
 };
