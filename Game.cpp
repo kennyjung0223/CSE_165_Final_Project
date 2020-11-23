@@ -13,9 +13,6 @@
 Game::Game() {
     bg = new TexRect("assets/winter_bg.png", -1, 1, 2, 2);
     explosion = new Sprite("assets/explosion.png", 5, 5, -0.8, 0.8, 0.5, 0.5);
-    // fries.push_back(new Projectiles("assets/fries.png", -0.3, 1.2, 0.1, 0.1));
-    // fries.push_back(new Projectiles("assets/fries.png", 0.1, 1.2, 0.1, 0.1));
-    // fries.push_back(new Projectiles("assets/fries.png", 0.4, 1.2, 0.1, 0.1));
     pepe = new Pepe();
 
     gameover = false;
@@ -31,9 +28,13 @@ void Game::draw() {
         update();
 
         draw_snowballs();
-        draw_fries();
+        draw_apples();
 
-        if (temp % 200 == 0) {
+        if (temp % 1000 == 0) {
+            generate_apples();
+        }
+
+        if (temp % 50 == 0) {
             generate_snowballs();
 
             if (temp == 1000) {
@@ -75,17 +76,20 @@ void Game::draw_snowballs() {
     }
 }
 
-void Game::draw_fries() {
-    if (!fries.empty()) {
-        std::vector<TexRect*>::iterator it = fries.begin();
+void Game::draw_apples() {
+    if (!apples.empty()) {
+        std::vector<TexRect*>::iterator it = apples.begin();
 
-        while (it != fries.end()) {
+        while (it != apples.end()) {
             (*it)->draw();
             (*it)->move();
 
             if (collided(*pepe, *(*it))) {
                 pepe->increment_speed();
-                fries.erase(it);
+                apples.erase(it);
+            }
+            else if ((*it)->getY() < -1) {
+                apples.erase(it);
             }
             else {
                 it++;
@@ -122,6 +126,9 @@ void Game::key_down(unsigned char key) {
     else if (key == 's') {
         movingDown = true;
     }
+    else if (gameover && key == 'r') {
+        reset();
+    }
 }
 
 void Game::update() {
@@ -139,13 +146,21 @@ void Game::update() {
     }
 }
 
+void Game::generate_apples() {
+    srand(time(0));
+
+    for (int i = 0; i < 3; i++) {
+        apples.push_back(new Projectiles("assets/apple.png", 0, 1, 0.125, 0.125, rand()));
+    }
+}
+
 void Game::generate_snowballs() {
     float arr[] = {-0.6, -0.1, 0.3};
 
     srand(time(0));
 
     for (int i = 0; i < 3; i++) {
-        snowballs.push_back(new Projectiles("assets/snowball.png", arr[i], 1, 0.15, 0.15, rand()));
+        snowballs.push_back(new Projectiles("assets/snowball_c.png", arr[i], 1, 0.1, 0.1, rand()));
     }
 }
 
@@ -173,6 +188,17 @@ void Game::idle() {
     pepe->idle();
 }
 
+void Game::reset() {
+    gameover = false;
+    pepe->setX(0);
+    pepe->setY(0);
+    pepe->reset_speed();
+    snowballs.clear();
+    apples.clear();
+    score = 0;
+    temp = 0;
+}
+
 Game::~Game() {
     delete bg;
     delete pepe;
@@ -181,7 +207,7 @@ Game::~Game() {
         delete (*it);
     }
 
-    for (std::vector<TexRect*>::iterator it = fries.begin(); it != fries.end(); it++) {
+    for (std::vector<TexRect*>::iterator it = apples.begin(); it != apples.end(); it++) {
         delete (*it);
     }
 }

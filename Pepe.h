@@ -14,6 +14,7 @@ public:
     void moveDown();
 
     float get_speed() const;
+    void reset_speed();
 
     void increment_speed();
 

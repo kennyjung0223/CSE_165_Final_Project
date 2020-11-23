@@ -1,11 +1,15 @@
 #include "Pepe.h"
 
-Pepe::Pepe(): TexRect("assets/pepe.png", 0, 0, 0.4, 0.4) {
+Pepe::Pepe(): TexRect("assets/pepe_c.png", 0, 0, 0.2, 0.2) {
     speed = 0.01;
 }
 
 float Pepe::get_speed() const {
     return speed;
+}
+
+void Pepe::reset_speed() {
+    speed = 0.01;
 }
 
 void Pepe::increment_speed() {

@@ -9,7 +9,7 @@ class Game {
     TexRect* bg;
     Sprite* explosion;
 
-    std::vector<TexRect*> fries;
+    std::vector<TexRect*> apples;
     std::vector<TexRect*> snowballs;
 
     Pepe* pepe;
@@ -31,16 +31,19 @@ public:
 
     void draw();
     void draw_snowballs();
-    void draw_fries();
+    void draw_apples();
 
     void key_up(unsigned char);
     void key_down(unsigned char);
 
     void update();
 
+    void generate_apples();
     void generate_snowballs();
 
     void idle();
+
+    void reset();
 
     Sprite* get_explosion() const;
 
