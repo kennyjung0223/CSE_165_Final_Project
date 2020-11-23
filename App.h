@@ -25,7 +25,6 @@ public:
     void idle();
 
     friend void explosion_timer(int);
-    friend void snowballs_timer(int);
 
     ~App();
 };

@@ -5,18 +5,11 @@ static App* singleton;
 
 void explosion_timer(int id) {
     singleton->game->get_explosion()->advance();
-    singleton->redraw();
 
     if (singleton->game->get_explosion()->isDone()) {
         singleton->game->set_explosion_off();
     }
     glutTimerFunc(2000, explosion_timer, id);
-}
-
-void snowballs_timer(int id) {
-    singleton->game->generate_snowballs();
-
-    glutTimerFunc(3000000, snowballs_timer, id);
 }
 
 App::App(int argc, char** argv, int width, int height, const char* title): GlutApp(argc, argv, width, height, title){
