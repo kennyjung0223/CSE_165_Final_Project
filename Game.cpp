@@ -68,6 +68,12 @@ void Game::draw() {
             }
         }
 
+        std::string s = std::to_string(pepe->get_speed());
+
+        if (pepe->get_speed() == pepe->get_max_speed()) {
+            renderText("Speed is now maxed", 0.45, -0.95, GLUT_BITMAP_HELVETICA_18, 0,0,0);
+        }
+
         renderText("Score: " + std::to_string(score), -0.95, -0.95, GLUT_BITMAP_HELVETICA_18, 0,0,0);
         temp++;
     }

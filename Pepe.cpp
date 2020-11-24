@@ -8,12 +8,18 @@ float Pepe::get_speed() const {
     return speed;
 }
 
+float Pepe::get_max_speed() const {
+    return MAX_SPEED;
+}
+
 void Pepe::reset_speed() {
     speed = 0.0075;
 }
 
 void Pepe::increment_speed() {
-    speed += 0.0025;
+    if (speed < MAX_SPEED) {
+        speed += 0.0025;
+    }
 }
 
 void Pepe::moveUp() {
