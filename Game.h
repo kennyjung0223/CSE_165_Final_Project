@@ -50,11 +50,12 @@ public:
 
     void update();
 
+    int score_threshold(int);
+    void check_threshold();
+
     void generate_apples();
     void generate_snowballs();
     void add_snowball();
-
-    void idle();
 
     void reset_sp();
     void reset();
@@ -65,6 +66,8 @@ public:
     bool is_gameover() const;
 
     void renderText(std::string, float, float, void*, float, float, float);
+
+    void idle();
 
     ~Game();
 };

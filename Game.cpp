@@ -27,7 +27,7 @@ Game::Game() {
     temp = 0;
     sb_quantity = 3;
     high_score = 0;
-    i = 1;
+    i = 0;
 }
 
 int Game::get_high_score(int score) {
@@ -100,12 +100,7 @@ void Game::draw_snowballs() {
             else if ((*it)->getY() < -1 || (*it)->getX() + (*it)->getW() > 1 || (*it)->getX() < -1) {
                 score++;
                 snowballs.erase(it);
-
-                // 100, 300, 600, 1000, 1500, 2100...
-                if (score == (i * 100)) {
-                    i = ((i + 1) * (i + 2)) / 2;
-                    add_snowball();
-                }
+                check_threshold();
             }
             else {
                 it++;
@@ -129,6 +124,7 @@ void Game::draw_apples() {
             }
             else if ((*it)->getY() < -1 || (*it)->getX() + (*it)->getW() > 1 || (*it)->getX() < -1) {
                 apples.erase(it);
+                check_threshold();
             }
             else {
                 it++;
@@ -188,6 +184,17 @@ void Game::update() {
     }
 }
 
+int Game::score_threshold(int num) {
+    return ((num + 1) * (num + 2)) / 2;
+}
+
+void Game::check_threshold() {
+    if (score >= (score_threshold(i) * 100)) {
+        i++;
+        add_snowball();
+    }    
+}
+
 void Game::generate_snowballs() {
     srand(time(0));
 
@@ -213,6 +220,28 @@ void Game::add_snowball() {
     sb_quantity++;    
 }
 
+void Game::reset_sp() {
+    for (int i = 3; i < sb_quantity; i++) {
+        starting_points.pop_back();
+    }
+
+    sb_quantity = 3;
+}
+
+void Game::reset() {
+    gameover = false;
+    pepe->setX(-0.1);
+    pepe->setY(-0.1);
+    pepe->reset_speed();
+    reset_sp();
+    snowballs.clear();
+    apples.clear();
+    score = 0;
+    temp = 0;
+    explosion_visible = false;
+    explosion->reset();
+}
+
 void Game::explode() {
     if (explosion_visible) {
         explosion->draw();
@@ -235,28 +264,6 @@ bool Game::is_gameover() const {
 
 void Game::idle() {
     pepe->idle();
-}
-
-void Game::reset_sp() {
-    for (int i = 3; i < sb_quantity; i++) {
-        starting_points.pop_back();
-    }
-
-    sb_quantity = 3;
-}
-
-void Game::reset() {
-    gameover = false;
-    pepe->setX(-0.1);
-    pepe->setY(-0.1);
-    pepe->reset_speed();
-    reset_sp();
-    snowballs.clear();
-    apples.clear();
-    score = 0;
-    temp = 0;
-    explosion_visible = false;
-    explosion->reset();
 }
 
 Game::~Game() {
